@@ -1,8 +1,8 @@
 const express = require("express");
 const fs = require("fs");
-
 const router = express.Router();
 const db = JSON.parse(fs.readFileSync('./db/db.json', 'utf8'));
+let note = db.notes;
 
 // Route to retrieve all notes
 router.get("/notes", (req, res) => {
@@ -11,23 +11,25 @@ router.get("/notes", (req, res) => {
 
 // Route to retrieve a single note by id
 router.get("/notes/:id", (req, res) => {
-  const note = db.notes.find(note => note.id === parseInt(req.params.id));
-
-  if (!note) {
-    return res.status(404).send("Note not found");
-  }
-
-  res.json(newNote);
-});
-
+    note = db.notes.find(note => note.id === parseInt(req.params.id));
+  
+    if (!note) {
+      return res.status(404).send("Note not found");
+    }
+  
+    res.json(note);
+  });
+  
 // Route to create a new note
 router.post("/notes", (req, res) => {
-    const newNote = req.body;
-    db.notes.push(newNote);
+    const newNote = {
+        id: db.length + 1,
+        text: req.body.text
+    }
+    db.push(newNote);
 
-  db.notes.push(newNote);
   fs.writeFileSync("./db/db.json", JSON.stringify(db), "utf-8");
-  res.json(newNote);
+  res.json(note);
 });
 
 // Route to update an existing note
@@ -40,7 +42,7 @@ router.put("/notes/:id", (req, res) => {
 
   db.notes[noteIndex].text = req.body.text;
   fs.writeFileSync("./db/db.json", JSON.stringify(db), "utf-8");
-  res.json(db.notes[noteIndex]);
+  res.json(note);
 });
 
 // Route to delete a note

@@ -11,7 +11,7 @@ router.get("/notes", (req, res) => {
 
 // Route to retrieve a single note by id
 router.get("/notes/:id", (req, res) => {
-    note = db.notes.find(note => note.id === parseInt(req.params.id));
+    note = db.find(note => note.id === parseInt(req.params.id));
   
     if (!note) {
       return res.status(404).send("Note not found");
@@ -19,11 +19,12 @@ router.get("/notes/:id", (req, res) => {
   
     res.json(note);
   });
-  
+
 // Route to create a new note
 router.post("/notes", (req, res) => {
     const newNote = {
         id: db.length + 1,
+        title: req.body.title,
         text: req.body.text
     }
     db.push(newNote);

@@ -25,39 +25,24 @@ const hide = (elem) => {
 // activeNote is used to keep track of the note in the textarea
 let activeNote = {};
 
-const getNotes = () => {
-  return fetch('/api/notes', {
+const getNotes = () =>
+  fetch('/api/notes', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
     },
-  })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .catch(err => {
-      console.error(err);
-    });
-};
+  });
 
-
-  const saveNote = (note) =>
+const saveNote = (note) =>
   fetch('/api/notes', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      ...note,
-      id: Math.floor(Math.random() * 1000000)
-    }),
+    body: JSON.stringify(note),
   });
 
-
-  const deleteNote = (id) =>
+const deleteNote = (id) =>
   fetch(`/api/notes/${id}`, {
     method: 'DELETE',
     headers: {
@@ -83,7 +68,6 @@ const renderActiveNote = () => {
 
 const handleNoteSave = () => {
   const newNote = {
-    id: Math.floor(Math.random() * 1000000),
     title: noteTitle.value,
     text: noteText.value,
   };
@@ -187,12 +171,7 @@ const renderNoteList = async (notes) => {
 };
 
 // Gets notes from the db and renders them to the sidebar
-const getAndRenderNotes = () => {
-  getNotes()
-    .then(renderNoteList)
-    .catch(error => console.error(error));
-};
-
+const getAndRenderNotes = () => getNotes().then(renderNoteList);
 
 if (window.location.pathname === '/notes') {
   saveNoteBtn.addEventListener('click', handleNoteSave);

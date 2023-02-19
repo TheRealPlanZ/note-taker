@@ -2,11 +2,12 @@ const express = require("express");
 const fs = require("fs");
 const router = express.Router();
 const db = JSON.parse(fs.readFileSync('./db/db.json', 'utf8'));
-let note = db.notes;
+// let note = db.notes;
 
 // Route to retrieve all notes
 router.get("/notes", (req, res) => {
-  res.json(db.notes);
+  console.log(db);
+  res.json(db);
 });
 
 // Route to retrieve a single note by id
@@ -30,7 +31,7 @@ router.post("/notes", (req, res) => {
     db.push(newNote);
 
   fs.writeFileSync("./db/db.json", JSON.stringify(db), "utf-8");
-  res.json(note);
+  res.json(db);
 });
 
 // Route to update an existing note
@@ -43,7 +44,7 @@ router.put("/notes/:id", (req, res) => {
 
   db.notes[noteIndex].text = req.body.text;
   fs.writeFileSync("./db/db.json", JSON.stringify(db), "utf-8");
-  res.json(note);
+  res.json(db);
 });
 
 // Route to delete a note
@@ -56,7 +57,7 @@ router.delete("/notes/:id", (req, res) => {
 
   const note = db.notes.splice(noteIndex, 1);
   fs.writeFileSync("./db/db.json", JSON.stringify(db), "utf-8");
-  res.json(note[0]);
+  res.json(db);
 });
 
 module.exports = router;

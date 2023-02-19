@@ -16,6 +16,7 @@ app.use('/', htmlRoutes);
 
 app.listen(PORT, () => {
     console.log(`App running on port ${PORT}!`);
+    console.log(`http://localhost:${PORT}`)
     console.log('Press Ctrl+C to quit.');
 });
 
